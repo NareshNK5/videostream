@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Panel</title>
+</head>
+<body>
+    <button onclick="sendCommand('video')">Video</button>
+    <button onclick="sendCommand('audio')">Audio</button>
+    <button onclick="sendCommand('image')">Image</button>
+
+    <script>
+        const ws = new WebSocket('ws://192.168.35.107:8000/ws/control/');
+
+        ws.onopen = function (e) {
+            console.log("The connection was setup successfully !");
+        };
+
+        ws.onclose = function (e) {
+            console.log("The connection was end successfully !");
+        };
+
+        ws.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const command = data.command;
+
+            if (command === 'video') {
+                alert('Play Video on System 2');
+            } else if (command === 'audio') {
+                alert('Play Audio on System 2');
+            } else if (command === 'image') {
+                alert('Show Image on System 2');
+            }
+        };
+
+        function sendCommand(command) {
+            ws.send(JSON.stringify({
+                'command': command
+            }));
+        }
+    </script>
+</body>
+</html>
